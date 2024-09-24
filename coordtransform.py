@@ -46,6 +46,7 @@ class Coordtransform(object):
         output = None
         chkout = 0
         chkin = 0
+        self.invalidCrs = self.dlg.ui.mQgsProjectionSelectionWidgetINPUT.crs()
         
     def initGui(self):
         # Create action that will start plugin configuration
@@ -84,6 +85,7 @@ class Coordtransform(object):
     
     def check_input(self):
         
+        print("Input CRS")
         print("CrsNotSet",self.dlg.ui.mQgsProjectionSelectionWidgetINPUT.CrsNotSet)
         print("Invalid",self.dlg.ui.mQgsProjectionSelectionWidgetINPUT.Invalid)
         print("crs",self.dlg.ui.mQgsProjectionSelectionWidgetINPUT.crs())
@@ -96,7 +98,8 @@ class Coordtransform(object):
         return chkin
     
     def check_output(self):
-        
+
+        print("Output CRS")        
         print("CrsNotSet",self.dlg.ui.mQgsProjectionSelectionWidgetOUTPUT.CrsNotSet)
         print("Invalid",self.dlg.ui.mQgsProjectionSelectionWidgetOUTPUT.Invalid)
         print("crs",self.dlg.ui.mQgsProjectionSelectionWidgetOUTPUT.crs())
@@ -117,6 +120,11 @@ class Coordtransform(object):
         self.dlg.ui.outputproj4.clear()
         self.dlg.ui.trfY.clear()
         self.dlg.ui.trfX.clear()
+        
+        # a modifier : non fonctionnel
+        self.dlg.ui.mQgsProjectionSelectionWidgetINPUT.setCrs(self.invalidCrs)
+        self.dlg.ui.mQgsProjectionSelectionWidgetOUTPUT.setCrs(self.invalidCrs)
+        self.dlg.ui.mQgsProjectionSelectionWidgetINPUT.update()
 
     
     def transform(self):
@@ -136,7 +144,7 @@ class Coordtransform(object):
         if chk == 4:
             x = self.dlg.ui.X.text()
             y = self.dlg.ui.Y.text()
-            context = QgsProject.instance()
+            
  
             crsSrc = self.dlg.ui.mQgsProjectionSelectionWidgetINPUT.crs()
             crsDest = self.dlg.ui.mQgsProjectionSelectionWidgetOUTPUT.crs()
@@ -163,7 +171,11 @@ class Coordtransform(object):
             self.dlg.ui.inputproj4.setText(str(crsSrc.toProj4()))
             self.dlg.ui.outputproj4.setText(str(crsDest.toProj4()))
             
+            context = QgsProject.instance()
             xform = QgsCoordinateTransform(crsSrc, crsDest, context)
+            
+            print(xform.coordinateOperation())
+            
             transfpoint=xform.transform(QgsPointXY(float(x),float(y)))
             
             self.dlg.ui.results.append("New coordinates:")

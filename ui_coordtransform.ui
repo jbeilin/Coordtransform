@@ -105,9 +105,9 @@
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>60</x>
+     <x>44</x>
      <y>120</y>
-     <width>21</width>
+     <width>51</width>
      <height>17</height>
     </rect>
    </property>
@@ -118,15 +118,15 @@
     </font>
    </property>
    <property name="text">
-    <string>X</string>
+    <string>X / lon</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_3">
    <property name="geometry">
     <rect>
-     <x>190</x>
+     <x>176</x>
      <y>120</y>
-     <width>21</width>
+     <width>41</width>
      <height>17</height>
     </rect>
    </property>
@@ -137,7 +137,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Y</string>
+    <string>Y / lat</string>
    </property>
   </widget>
   <widget class="QPushButton" name="transform">
@@ -201,7 +201,7 @@
   <widget class="QLabel" name="label_8">
    <property name="geometry">
     <rect>
-     <x>240</x>
+     <x>110</x>
      <y>10</y>
      <width>271</width>
      <height>71</height>
@@ -223,7 +223,7 @@
     <string>X,Y point coordtransform
  Copyright (C) 2018 Giuseppe De Marco
 www.d2gis.com
-Modifications Jacques BEILIN
+Modifications Jacques Beilin
 ENSG 2024</string>
    </property>
    <property name="textFormat">
@@ -244,22 +244,6 @@ ENSG 2024</string>
    </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_9">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>0</y>
-     <width>221</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="pixmap">
-    <pixmap resource="resources.qrc">:/plugins/coordtransform/logo.png</pixmap>
    </property>
   </widget>
   <widget class="QLabel" name="label_7">
