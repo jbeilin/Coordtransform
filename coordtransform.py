@@ -32,6 +32,7 @@ from . import resources
 #import pdb
 # Import the code for the dialog
 from .coordtransformdialog import CoordtransformDialog
+import re
 
 class Coordtransform(object):
 
@@ -66,54 +67,57 @@ class Coordtransform(object):
     def check_x(self):
         x = self.dlg.ui.X.text()
         if  x =='':
-            QMessageBox.critical(None,"!","Please provide X value")
+            QMessageBox.critical(None,"!","Please provide X/lon value")
             chkx = 0
-            return chkx
         else:
             chkx = 1
-            return chkx
+        return chkx
     
     def check_y(self):
         y = self.dlg.ui.Y.text()
         if  y == '':
-            QMessageBox.critical(None,"!","Please provide Y value")
+            QMessageBox.critical(None,"!","Please provide Y/lat value")
             chky = 0
-            return chky
         else:
             chky = 1
-            return chky
+        return chky
     
     def check_input(self):
-        input = self.dlg.ui.inputcrs.text()
-        if  input == '':
-            QMessageBox.critical(None,"!","Please provide input epsg code")
+        
+        print("CrsNotSet",self.dlg.ui.mQgsProjectionSelectionWidgetINPUT.CrsNotSet)
+        print("Invalid",self.dlg.ui.mQgsProjectionSelectionWidgetINPUT.Invalid)
+        print("crs",self.dlg.ui.mQgsProjectionSelectionWidgetINPUT.crs())
+        
+        if  re.search('invalid', str(self.dlg.ui.mQgsProjectionSelectionWidgetINPUT.crs()), re.IGNORECASE):
+            QMessageBox.critical(None,"!","Please select an input CRS")
             chkin = 0
-            return chkin
         else:
             chkin = 1
-            return chkin
+        return chkin
     
     def check_output(self):
-        output = self.dlg.ui.outputcrs.text()
-        if  output == '':
-            QMessageBox.critical(None,"!","Please provide output epsg code")
+        
+        print("CrsNotSet",self.dlg.ui.mQgsProjectionSelectionWidgetOUTPUT.CrsNotSet)
+        print("Invalid",self.dlg.ui.mQgsProjectionSelectionWidgetOUTPUT.Invalid)
+        print("crs",self.dlg.ui.mQgsProjectionSelectionWidgetOUTPUT.crs())
+        
+        if  re.search('invalid', str(self.dlg.ui.mQgsProjectionSelectionWidgetOUTPUT.crs()), re.IGNORECASE):
+            QMessageBox.critical(None,"!","Please select an output CRS")
             chkout = 0
-            return chkout
         else:
             chkout = 1
-            return chkout
+        return chkout
             
     
     def clear(self):
         self.dlg.ui.results.clear()
         self.dlg.ui.X.clear()
         self.dlg.ui.Y.clear()
-        self.dlg.ui.inputcrs.clear()
-        self.dlg.ui.outputcrs.clear()
         self.dlg.ui.inputproj4.clear()
         self.dlg.ui.outputproj4.clear()
         self.dlg.ui.trfY.clear()
         self.dlg.ui.trfX.clear()
+
     
     def transform(self):
         #pyqtRemoveInputHook()
@@ -127,37 +131,44 @@ class Coordtransform(object):
         chky = self.check_y()
         chkin = self.check_input()
         chkout = self.check_output()
-        if (chkin == 1) and (chkout == 1) and (chkx == 1) and (chky == 1):
+        chk = chkx + chky + chkin + chkout
+        
+        if chk == 4:
             x = self.dlg.ui.X.text()
             y = self.dlg.ui.Y.text()
-            input = "EPSG:"+ self.dlg.ui.inputcrs.text()
-            output = "EPSG:"+self.dlg.ui.outputcrs.text()
             context = QgsProject.instance()
-            crsSrc = QgsCoordinateReferenceSystem(input)
-            crsDest = QgsCoordinateReferenceSystem(output)
-            if crsSrc.authid() == '':
-                source_crs = QgsCoordinateReferenceSystem()
-                source_crs.createFromId(int(input), QgsCoordinateReferenceSystem.InternalCrsId)
-                if source_crs.authid() == '':
-                    QMessageBox.critical(None,"!","Please provide a valid input epsg/user code")
-                    return
-                else:
-                    crsSrc=source_crs
-            if crsDest.authid() == '':
-                dest_crs = QgsCoordinateReferenceSystem()
-                dest_crs.createFromId(int(output), QgsCoordinateReferenceSystem.InternalCrsId)
-                if dest_crs.authid() == '':
-                    QMessageBox.critical(None,"!","Please provide a valid output epsg/user code")
-                    return
-                else:
-                    crsDest=dest_crs
+ 
+            crsSrc = self.dlg.ui.mQgsProjectionSelectionWidgetINPUT.crs()
+            crsDest = self.dlg.ui.mQgsProjectionSelectionWidgetOUTPUT.crs()
+            
+            # if crsSrc.authid() == '':
+            #     source_crs = QgsCoordinateReferenceSystem()
+            #     source_crs.createFromId(int(input), QgsCoordinateReferenceSystem.InternalCrsId)
+            #     if source_crs.authid() == '':
+            #         QMessageBox.critical(None,"!","Please provide a valid input epsg/user code")
+            #         return
+            #     else:
+            #         crsSrc=source_crs
+            # if crsDest.authid() == '':
+            #     dest_crs = QgsCoordinateReferenceSystem()
+            #     dest_crs.createFromId(int(output), QgsCoordinateReferenceSystem.InternalCrsId)
+            #     if dest_crs.authid() == '':
+            #         QMessageBox.critical(None,"!","Please provide a valid output epsg/user code")
+            #         return
+            #     else:
+            #         crsDest=dest_crs
+            
             self.dlg.ui.results.setText("input CRS "+crsSrc.authid()+"\n"+"output CRS "+crsDest.authid())
+            
             self.dlg.ui.inputproj4.setText(str(crsSrc.toProj4()))
             self.dlg.ui.outputproj4.setText(str(crsDest.toProj4()))
+            
             xform = QgsCoordinateTransform(crsSrc, crsDest, context)
             transfpoint=xform.transform(QgsPointXY(float(x),float(y)))
+            
             self.dlg.ui.results.append("New coordinates:")
             self.dlg.ui.results.append(transfpoint.toString())
+            
             self.dlg.ui.trfX.setText(str(transfpoint.x()))
             self.dlg.ui.trfY.setText(str(transfpoint.y()))
         else:
