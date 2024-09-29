@@ -51,7 +51,7 @@ class Coordtransform(object):
     def initGui(self):
         # Create action that will start plugin configuration
         self.action = QAction(QIcon(":/plugins/coordtransform/icon.png"), \
-            "Coordtransform", self.iface.mainWindow())
+            "Coordtransform_ENSG", self.iface.mainWindow())
         # connect the action to the run method
         self.action.triggered.connect(self.run)
         
