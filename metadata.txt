@@ -6,7 +6,7 @@
 # This file should be included when you package your plugin.
 
 [general]
-name=Coordtransform
+name=Coordtransform_ENSG
 description=transform x,y input coordinate to whatever new reference system / modifications Jacques Beilin ENSG-2024 
 version=1.0
 qgisMinimumVersion=3.0

@@ -85,10 +85,9 @@ class Coordtransform(object):
     
     def check_input(self):
         
-        print("Input CRS")
-        print("CrsNotSet",self.dlg.ui.mQgsProjectionSelectionWidgetINPUT.CrsNotSet)
-        print("Invalid",self.dlg.ui.mQgsProjectionSelectionWidgetINPUT.Invalid)
-        print("crs",self.dlg.ui.mQgsProjectionSelectionWidgetINPUT.crs())
+        print("Input CRS :", self.dlg.ui.mQgsProjectionSelectionWidgetINPUT.crs())
+        # print("CrsNotSet",self.dlg.ui.mQgsProjectionSelectionWidgetINPUT.CrsNotSet)
+        # print("Invalid",self.dlg.ui.mQgsProjectionSelectionWidgetINPUT.Invalid)
         
         if  re.search('invalid', str(self.dlg.ui.mQgsProjectionSelectionWidgetINPUT.crs()), re.IGNORECASE):
             QMessageBox.critical(None,"!","Please select an input CRS")
@@ -99,10 +98,9 @@ class Coordtransform(object):
     
     def check_output(self):
 
-        print("Output CRS")        
-        print("CrsNotSet",self.dlg.ui.mQgsProjectionSelectionWidgetOUTPUT.CrsNotSet)
-        print("Invalid",self.dlg.ui.mQgsProjectionSelectionWidgetOUTPUT.Invalid)
-        print("crs",self.dlg.ui.mQgsProjectionSelectionWidgetOUTPUT.crs())
+        print("Output CRS :", self.dlg.ui.mQgsProjectionSelectionWidgetOUTPUT.crs())        
+        # print("CrsNotSet",self.dlg.ui.mQgsProjectionSelectionWidgetOUTPUT.CrsNotSet)
+        # print("Invalid",self.dlg.ui.mQgsProjectionSelectionWidgetOUTPUT.Invalid)
         
         if  re.search('invalid', str(self.dlg.ui.mQgsProjectionSelectionWidgetOUTPUT.crs()), re.IGNORECASE):
             QMessageBox.critical(None,"!","Please select an output CRS")
@@ -140,8 +138,14 @@ class Coordtransform(object):
         chkin = self.check_input()
         chkout = self.check_output()
         chk = chkx + chky + chkin + chkout
+    
         
         if chk == 4:
+            
+            self.dlg.ui.results.clear()
+            self.dlg.ui.inputproj4.clear()
+            self.dlg.ui.outputproj4.clear()
+            
             x = self.dlg.ui.X.text()
             y = self.dlg.ui.Y.text()
             
@@ -149,24 +153,10 @@ class Coordtransform(object):
             crsSrc = self.dlg.ui.mQgsProjectionSelectionWidgetINPUT.crs()
             crsDest = self.dlg.ui.mQgsProjectionSelectionWidgetOUTPUT.crs()
             
-            # if crsSrc.authid() == '':
-            #     source_crs = QgsCoordinateReferenceSystem()
-            #     source_crs.createFromId(int(input), QgsCoordinateReferenceSystem.InternalCrsId)
-            #     if source_crs.authid() == '':
-            #         QMessageBox.critical(None,"!","Please provide a valid input epsg/user code")
-            #         return
-            #     else:
-            #         crsSrc=source_crs
-            # if crsDest.authid() == '':
-            #     dest_crs = QgsCoordinateReferenceSystem()
-            #     dest_crs.createFromId(int(output), QgsCoordinateReferenceSystem.InternalCrsId)
-            #     if dest_crs.authid() == '':
-            #         QMessageBox.critical(None,"!","Please provide a valid output epsg/user code")
-            #         return
-            #     else:
-            #         crsDest=dest_crs
+            print(crsSrc.bounds())
+            print(crsDest.bounds())
             
-            self.dlg.ui.results.setText("input CRS "+crsSrc.authid()+"\n"+"output CRS "+crsDest.authid())
+            # self.dlg.ui.results.setText("input CRS "+crsSrc.authid()+"\n"+"output CRS "+crsDest.authid())
             
             self.dlg.ui.inputproj4.setText(str(crsSrc.toProj4()))
             self.dlg.ui.outputproj4.setText(str(crsDest.toProj4()))
@@ -175,14 +165,21 @@ class Coordtransform(object):
             xform = QgsCoordinateTransform(crsSrc, crsDest, context)
             
             print(xform.coordinateOperation())
+            print(xform.instantiatedCoordinateOperationDetails().proj)
             
             transfpoint=xform.transform(QgsPointXY(float(x),float(y)))
             
-            self.dlg.ui.results.append("New coordinates:")
-            self.dlg.ui.results.append(transfpoint.toString())
+            self.dlg.ui.results.append("Pipeline : %s\n" % xform.instantiatedCoordinateOperationDetails().proj)
             
-            self.dlg.ui.trfX.setText(str(transfpoint.x()))
-            self.dlg.ui.trfY.setText(str(transfpoint.y()))
+            if crsDest.isGeographic():
+                strCoordFormat = "%.8f"
+            else:
+                strCoordFormat = "%.4f"
+                
+            self.dlg.ui.results.append("New coordinates : (%s, %s)" % (strCoordFormat % transfpoint.x(), strCoordFormat % transfpoint.y()))
+            
+            self.dlg.ui.trfX.setText(strCoordFormat % transfpoint.x())
+            self.dlg.ui.trfY.setText(strCoordFormat % transfpoint.y())
         else:
             return
 

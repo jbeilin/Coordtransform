@@ -16,7 +16,7 @@
   <widget class="QDialogButtonBox" name="OK">
    <property name="geometry">
     <rect>
-     <x>350</x>
+     <x>342</x>
      <y>580</y>
      <width>171</width>
      <height>32</height>
@@ -71,9 +71,9 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>420</y>
+     <y>400</y>
      <width>501</width>
-     <height>101</height>
+     <height>141</height>
     </rect>
    </property>
    <property name="font">
@@ -163,7 +163,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>400</y>
+     <y>380</y>
      <width>61</width>
      <height>20</height>
     </rect>
@@ -250,7 +250,7 @@ ENSG 2024</string>
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>260</y>
+     <y>250</y>
      <width>211</width>
      <height>20</height>
     </rect>
@@ -269,7 +269,7 @@ ENSG 2024</string>
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>330</y>
+     <y>316</y>
      <width>221</width>
      <height>20</height>
     </rect>
@@ -287,8 +287,8 @@ ENSG 2024</string>
   <widget class="QLabel" name="label_11">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>550</y>
+     <x>178</x>
+     <y>554</y>
      <width>21</width>
      <height>17</height>
     </rect>
@@ -306,8 +306,8 @@ ENSG 2024</string>
   <widget class="QLabel" name="label_12">
    <property name="geometry">
     <rect>
-     <x>230</x>
-     <y>550</y>
+     <x>355</x>
+     <y>553</y>
      <width>21</width>
      <height>17</height>
     </rect>
@@ -325,10 +325,10 @@ ENSG 2024</string>
   <widget class="QLabel" name="label_13">
    <property name="geometry">
     <rect>
-     <x>60</x>
-     <y>530</y>
-     <width>251</width>
-     <height>20</height>
+     <x>10</x>
+     <y>546</y>
+     <width>121</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="font">
@@ -338,14 +338,15 @@ ENSG 2024</string>
     </font>
    </property>
    <property name="text">
-    <string>TRANSFORMED COORDINATES</string>
+    <string>TRANSFORMED 
+COORDINATES</string>
    </property>
   </widget>
   <widget class="QTextBrowser" name="inputproj4">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>280</y>
+     <y>270</y>
      <width>501</width>
      <height>41</height>
     </rect>
@@ -361,7 +362,7 @@ ENSG 2024</string>
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>350</y>
+     <y>336</y>
      <width>501</width>
      <height>41</height>
     </rect>
@@ -376,8 +377,8 @@ ENSG 2024</string>
   <widget class="QTextBrowser" name="trfX">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>570</y>
+     <x>210</x>
+     <y>546</y>
      <width>131</width>
      <height>31</height>
     </rect>
@@ -392,8 +393,8 @@ ENSG 2024</string>
   <widget class="QTextBrowser" name="trfY">
    <property name="geometry">
     <rect>
-     <x>170</x>
-     <y>570</y>
+     <x>380</x>
+     <y>546</y>
      <width>131</width>
      <height>31</height>
     </rect>
@@ -472,6 +473,7 @@ ENSG 2024</string>
    <header>qgsprojectionselectionwidget.h</header>
   </customwidget>
  </customwidgets>
+ <resources/>
  <connections>
   <connection>
    <sender>OK</sender>
